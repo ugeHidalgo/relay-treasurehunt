@@ -1,7 +1,7 @@
 import React from "react";
 import Relay from 'react-relay';
 
-//import "./homepage.css";
+import "./home.css";
 
 
 class Home extends React.Component {

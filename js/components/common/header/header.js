@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router";
-//import './header.css';
+import './header.css';
 //import jQuery from 'jquery';
 
 

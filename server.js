@@ -60,7 +60,10 @@ let server = express();
         }
       ]
     },
-    output: {filename: 'bundle.js', path: '/'}
+    output: {
+        path: __dirname + "/public",
+        filename: "bundle.js"
+    }
   });
   var app = new WebpackDevServer(compiler, {
     contentBase: '/public/',
