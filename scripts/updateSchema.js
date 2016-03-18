@@ -14,6 +14,7 @@ import path from 'path';
 let server = express();
 server.use(express.static('public'));
 
+//To update the schema use: npm run update-schema
 
 (async() =>{
   let db;

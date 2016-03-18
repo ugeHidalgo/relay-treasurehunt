@@ -4,7 +4,7 @@ import Relay from 'react-relay';
 class Athlete extends React.Component {
 
   renderRow() {
-    return this.props.query.athletes.map(athlete => {
+    return this.props.store.athletes.map(athlete => {
       return (
         <tr key={athlete.id}>
           <td>{athlete.dni}</td>
@@ -40,7 +40,7 @@ class Athlete extends React.Component {
 				</table>
 				<div className="panel-footer">
 					<div className="footerText">
-						<p>Total Athletes  : {this.props.query.athletes.length}</p>
+						<p>Total Athletes  : {this.props.store.athletes.length}</p>
 					</div>
 				</div>
 			</div>
@@ -50,7 +50,7 @@ class Athlete extends React.Component {
 
 export default Relay.createContainer(Athlete, {
   fragments: {
-    query: () => Relay.QL`
+    store: () => Relay.QL`
       fragment on Store {
           athletes {
             id,

@@ -1,7 +1,7 @@
 import Relay from 'react-relay';
 
 export default {
-  query: () => Relay.QL`
+  store: () => Relay.QL`
     query {
       store
     }

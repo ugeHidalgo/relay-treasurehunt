@@ -27,7 +27,7 @@ class Main extends React.Component {
 
 export default Relay.createContainer(Main, {
   fragments: {
-    query: () => Relay.QL`
+    store: () => Relay.QL`
       fragment on Store {
           athletes {
             id,

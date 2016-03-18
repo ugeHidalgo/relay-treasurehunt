@@ -1,6 +1,6 @@
 import React from "react";
 import Relay from 'react-relay';
-
+import $ from 'jQuery';
 import "./home.css";
 
 
@@ -59,7 +59,7 @@ class Home extends React.Component {
 
 export default Relay.createContainer(Home, {
   fragments: {
-    query: () => Relay.QL`
+    store: () => Relay.QL`
       fragment on Store {
           athletes {
             id,

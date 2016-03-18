@@ -7,6 +7,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import {RelayRouter} from 'react-router-relay';
 import {hashHistory} from 'react-router';
+
 // import Main from './components/main/main';
 // import Home from './components/home/home';
 // import Athlete from './components/athlete/athlete';

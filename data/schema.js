@@ -67,22 +67,14 @@ var athleteType = new GraphQLObjectType({
 
 var storeType = new GraphQLObjectType({
   		name: 'Store',
-  		fields: ()=>({
-        athlete: {
-				      type: new GraphQLList(athleteType),
-				          args: {
-					               id: globalIdField('Athlete')
-				                },
-				          resolve : (root, {id} ) => getAthleteById(id)
-			  },
-
+  		fields: {
   			athletes: {
   				type: new GraphQLList(athleteType),
   				resolve: () => {
             return getAthletes(db);
           }
   			}
-  		})
+  		}
   	});
 
 var RootQuery = new GraphQLObjectType ({
