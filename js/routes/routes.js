@@ -9,7 +9,7 @@ import {RelayRouter} from 'react-router-relay';
 
 import Main from '../components/main/main';
 import Home from '../components/home/home';
-import Athlete from '../components/athlete/athlete';
+import Competition from '../components/competition/competition';
 import ViewerQueries from '../queries/ViewerQueries';
 
 var routes = (
@@ -22,8 +22,8 @@ var routes = (
       <Route path="/homePage"
         component={Home}
         queries={ViewerQueries}/>
-      <Route path="/athletesList"
-        component={Athlete}
+      <Route path="/athlete"
+        component={Competition}
         queries={ViewerQueries}/>
     </Route>
 );
