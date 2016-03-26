@@ -4,24 +4,24 @@ import Relay from 'react-relay';
 class Athlete extends React.Component {
 
   renderCompetitionRow() {
-    let athleteCompetitions = this.props.viewer.competitions.edges;
-    return athleteCompetitions.map(comp => {
+    debugger;
+    let Competitions = this.props.store.competitions;
+    return Competitions.map(comp => {
       return (
-        <tr key={comp.node.__dataID__}>
-          <td>{comp.node.name}</td>
-          <td>{comp.node.type}</td>
-          <td>{comp.node.city}</td>
-          <td>{comp.node.country}</td>
+        <tr key={comp.__dataID__}>
+          <td>{comp.name}</td>
+          <td>{comp.type}</td>
+          <td>{comp.city}</td>
+          <td>{comp.country}</td>
         </tr>
       )
     });
   }
 
   render() {
-    let athlete = this.props.viewer;
 		return (
 			<div className="panel panel-primary">
-				<div className="panel-heading">Competitions for athlete : {athlete.firstName} {athlete.lastName}</div>
+				<div className="panel-heading">Competitions</div>
 				<table className='table'>
 					<thead>
 						<tr>
@@ -37,7 +37,7 @@ class Athlete extends React.Component {
 				</table>
 				<div className="panel-footer">
 					<div className="footerText">
-						<p>Total competitions  : {this.props.viewer.competitions.edges.length}</p>
+						<p>Total competitions  : {this.props.store.competitions.length}</p>
 					</div>
 				</div>
 			</div>
@@ -47,19 +47,13 @@ class Athlete extends React.Component {
 
 export default Relay.createContainer(Athlete, {
   fragments: {
-    viewer: () => Relay.QL`
-      fragment on Athlete {
-        firstName,
-        lastName,
-        competitions(first:2) {
-          edges {
-            node{
-              name,
-              type,
-              city,
-              country
-            }
-          }
+    store: () => Relay.QL`
+      fragment on Store {
+        competitions{
+          name,
+          type,
+          city,
+          country
         }
       }
     `,

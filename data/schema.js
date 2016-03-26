@@ -14,6 +14,7 @@ import {
   connectionArgs,
   connectionDefinitions,
   connectionFromArray,
+  connectionFromPromisedArray,
   fromGlobalId,
   globalIdField,
   mutationWithClientMutationId,
@@ -23,8 +24,9 @@ import {
 import {
   Athlete,
   Competition,
-  getViewer,
+  getStore,
   getAthlete,
+  getAthletes,
   getCompetition,
   getCompetitions,
 } from './api';
@@ -37,7 +39,7 @@ var {nodeInterface, nodeField} = nodeDefinitions(
     if (type === 'Athlete') {
       return getAthlete(id);
     } else if (type === 'Competition') {
-      return getCompetition(db,id);
+      return getCompetition(id);
     } else {
       return null;
     }
@@ -53,6 +55,8 @@ var {nodeInterface, nodeField} = nodeDefinitions(
   }
 );
 
+var store = {};
+
 var athleteType = new GraphQLObjectType({
 		name : 'Athlete',
 		fields: ()=> ({
@@ -65,10 +69,28 @@ var athleteType = new GraphQLObjectType({
 			country : {type: GraphQLString},
 			tlf: {type: GraphQLString},
 			sex: {type: GraphQLString},
+      // competitions: {
+      //   type: competitionsConnection.connectionType,
+      //   args: connectionArgs,
+      //   resolve: (_,args) => {
+      //        return connectionFromPromisedArray(
+      //             getCompetitions(),args
+      //        );
+      //   }
+      // }
       competitions: {
         type:  competitionConnection,
-        args: connectionArgs,
-        resolve: (_,args) => connectionFromArray(getCompetitions(db),args),
+        args: {
+          athleteId : {
+            type: GraphQLString,
+            defaltValue: 'all'
+          },
+          ...connectionArgs,
+        },
+        resolve: (_,{athleteId,...args}) => {
+          athleteId = id;
+          return connectionFromPromisedArray(getCompetitions(athleteId),args);
+        },
       },
 		}),
     interfaces: [nodeInterface]
@@ -89,28 +111,44 @@ var athleteType = new GraphQLObjectType({
 
   var {connectionType: competitionConnection} =
     connectionDefinitions({name: 'Competition', nodeType: competitionType});
+// let competitionsConnection = connectionDefinitions({
+//   name: 'Competition',
+//   nodeType: competitionType
+// });
 
+var storeType = new GraphQLObjectType({
+  		name: 'Store',
+  		fields: {
+  			athlete: {
+  				type: athleteType,
+  				resolve: () => {
+            return getStore();
+          }
+  			},
 
-// var storeType = new GraphQLObjectType({
-//   		name: 'Store',
-//   		fields: {
-//   			athletes: {
-//   				type: new GraphQLList(athleteType),
-//   				resolve: () => {
-//             return getAthletes(db);
-//           }
-//   			}
-//   		}
-//   	});
+        athletes: {
+          type: new GraphQLList(athleteType),
+          resolve: () => {
+            return getAthletes();
+          }
+        },
+
+        competitions: {
+          type: new GraphQLList(competitionType),
+          resolve: () => {
+            return getCompetitions();
+          }
+        },
+  		}
+  	});
 
 var queryType = new GraphQLObjectType ({
       name: 'RootQuery',
       fields: () => ({
-        node: nodeField,
-        viewer: {
-          type: athleteType,
-          resolve: () => getViewer(),
-        },
+        store: {
+          type: storeType,
+          resolve: () => store
+        }
       })
     });
 

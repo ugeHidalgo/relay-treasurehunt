@@ -27,15 +27,12 @@ class Main extends React.Component {
 
 export default Relay.createContainer(Main, {
   fragments: {
-    viewer: () => Relay.QL`
-      fragment on Athlete {
-            id,
-            dni,
-            firstName,
-            lastName,
-            address,
-            city,
-            country,
+    store: () => Relay.QL`
+      fragment on Store {
+				athlete {
+					id,
+					firstName
+				}
       }
     `,
   },
