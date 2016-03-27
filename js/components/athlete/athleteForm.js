@@ -4,7 +4,8 @@ import Relay from 'react-relay';
 class AthleteForm extends React.Component {
 
   renderAthleteCompetitionRow() {
-    let athleteCompetitions = this.props.store.athlete.competitions.edges;
+    debugger;
+    let athleteCompetitions = this.props.store.athleteConnection.edges[0].node.competitions.edges;
     return athleteCompetitions.map(comp => {
       return (
         <tr key={comp.node.__dataID__}>
@@ -18,7 +19,8 @@ class AthleteForm extends React.Component {
   }
 
   render() {
-    let athlete = this.props.store.athlete;
+    debugger;
+    let athlete = this.props.store.athleteConnection.edges[0].node;
 		return (
 			<div className="panel panel-primary">
 				<div className="panel-heading">Athlete</div>
@@ -61,22 +63,24 @@ export default Relay.createContainer(AthleteForm, {
   },
   fragments: {
     store: () => Relay.QL`
-      fragment on Store {
-        athlete {
-          firstName,
-          lastName,
-          competitions(first:$limit) {
+    fragment on Store {
+      athleteConnection(first: 1, firstName: "Juan") {
+      edges {
+        node {
+          id
+          firstName
+          lastName
+          competitions(first: 5) {
             edges {
               node {
-                name,
-                type,
-                city,
-                country
+                name
               }
             }
           }
         }
       }
-    `,
+    }
+      }
+  `,
   },
 });

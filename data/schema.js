@@ -25,7 +25,6 @@ import {
   Athlete,
   Competition,
   getStore,
-  getAthlete,
   getAthletes,
   getCompetition,
   getAllCompetitions,
@@ -104,7 +103,50 @@ var competitionType = new GraphQLObjectType({
 
 var {connectionType: competitionConnection} =
     connectionDefinitions({name: 'Competition', nodeType: competitionType});
-// let competitionsConnection = connectionDefinitions({
+
+// var storeType = new GraphQLObjectType({
+//   		name: 'Store',
+//   		fields: {
+//         id: globalIdField("Store"),
+//   			athlete: {
+//   				type: athleteType,
+//           args: {
+//             ...connectionArgs,
+//             athleteId : { type: GraphQLString }
+//           },
+//   				resolve: (_,args) => {
+//             return connectionFromPromisedArray(getAthlete(args.athleteId),args);
+//           }
+//   			},
+//
+//         athletes: {
+//           type: new GraphQLList(athleteType),
+//           resolve: () => {
+//             return getAthletes();
+//           }
+//         },
+//
+//         competitions: {
+//           type: new GraphQLList(competitionType),
+//           args: {
+//             athleteId : {
+//               type: GraphQLString,
+//               defaltValue: 'all'
+//             },
+//           },
+//           resolve: (_,args) => {
+//               return getAthleteCompetitions(args.athleteId);
+//           }
+//         },
+//   		}
+// });
+
+let athleteConnection = connectionDefinitions({
+  name: 'Athlete',
+  nodeType: athleteType
+});
+
+// let competitionConnection = connectionDefinitions({
 //   name: 'Competition',
 //   nodeType: competitionType
 // });
@@ -112,23 +154,17 @@ var {connectionType: competitionConnection} =
 var storeType = new GraphQLObjectType({
   		name: 'Store',
   		fields: {
-  			athlete: {
-  				type: athleteType,
+        id: globalIdField("Store"),
+  			athleteConnection: {
+  				type: athleteConnection.connectionType,
           args: {
             ...connectionArgs,
-            athleteId : { type: GraphQLString }
+            firstName : { type: GraphQLString }
           },
   				resolve: (_,args) => {
-            return getAthlete(args.athleteId);
+            return connectionFromPromisedArray(getAthletes(args.firstName),args);
           }
   			},
-
-        athletes: {
-          type: new GraphQLList(athleteType),
-          resolve: () => {
-            return getAthletes();
-          }
-        },
 
         competitions: {
           type: new GraphQLList(competitionType),
@@ -139,7 +175,7 @@ var storeType = new GraphQLObjectType({
             },
           },
           resolve: (_,args) => {
-              return getCompetitions(args.athleteId);
+              return connectionFromPromisedArray(getAthleteCompetitions(args.athleteId),args);
           }
         },
   		}

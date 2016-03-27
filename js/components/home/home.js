@@ -61,12 +61,17 @@ export default Relay.createContainer(Home, {
   fragments: {
     store: () => Relay.QL`
 		fragment on Store {
-			athlete {
-				id,
-				firstName
+			athleteConnection(first:1) {
+				edges {
+					node {
+						id,
+						firstName,
+						lastName
+					}
+				}
 			}
 		}
-    `,
+	`,
   },
 });
 
