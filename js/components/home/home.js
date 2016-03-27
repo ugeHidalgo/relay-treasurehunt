@@ -11,8 +11,8 @@ class Home extends React.Component {
 			<div>
 				<div className="jumbotron">
 					<div id="jumbotron-title" className="text-center">
-						<h1>Welcome to this React/Flux/GraphQl sample</h1>
-						<p>React, React Router, and Flux for ultra-responsive web apps</p>
+						<h1>Welcome to this React/Relay/GraphQl sample</h1>
+						<p>React, React Router, mongodb and Relay for ultra-responsive web apps</p>
 						<h3>by ugeHidalgo 2016</h3>
 					</div>
 				</div>

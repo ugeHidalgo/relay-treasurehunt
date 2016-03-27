@@ -1,10 +1,9 @@
 import React from 'react';
 import Relay from 'react-relay';
 
-class Athlete extends React.Component {
+class Competition extends React.Component {
 
   renderCompetitionRow() {
-    debugger;
     let Competitions = this.props.store.competitions;
     return Competitions.map(comp => {
       return (
@@ -45,7 +44,7 @@ class Athlete extends React.Component {
   }
 }
 
-export default Relay.createContainer(Athlete, {
+export default Relay.createContainer(Competition, {
   fragments: {
     store: () => Relay.QL`
       fragment on Store {

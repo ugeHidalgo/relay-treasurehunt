@@ -1,7 +1,7 @@
 import React from 'react';
 import Relay from 'react-relay';
 
-class Athlete extends React.Component {
+class AthleteCompetitions extends React.Component {
 
   renderAthleteCompetitionRow() {
     let athleteCompetitions = this.props.store.athlete.competitions.edges;
@@ -45,16 +45,14 @@ class Athlete extends React.Component {
   }
 }
 
-export default Relay.createContainer(Athlete, {
+export default Relay.createContainer(AthleteCompetitions, {
   initialVariables: {
-    limit: 3
+    limit: 5
   },
   fragments: {
     store: () => Relay.QL`
       fragment on Store {
         athlete {
-          firstName,
-          lastName,
           competitions(first:$limit) {
             edges {
               node {

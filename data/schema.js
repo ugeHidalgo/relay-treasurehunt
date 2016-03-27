@@ -28,10 +28,10 @@ import {
   getAthlete,
   getAthletes,
   getCompetition,
+  getAllCompetitions,
   getCompetitions,
 } from './api';
 
-let Schema = (db) => {
 
 var {nodeInterface, nodeField} = nodeDefinitions(
   (globalId) => {
@@ -80,23 +80,16 @@ var athleteType = new GraphQLObjectType({
       // }
       competitions: {
         type:  competitionConnection,
-        args: {
-          athleteId : {
-            type: GraphQLString,
-            defaltValue: 'all'
-          },
-          ...connectionArgs,
-        },
-        resolve: (_,{athleteId,...args}) => {
-          athleteId = id;
-          return connectionFromPromisedArray(getCompetitions(athleteId),args);
+        args: connectionArgs,
+        resolve: (_,args) => {
+          return connectionFromPromisedArray(getAllCompetitions(),args);
         },
       },
 		}),
     interfaces: [nodeInterface]
 	});
 
-  var competitionType = new GraphQLObjectType({
+var competitionType = new GraphQLObjectType({
   		name : 'Competition',
   		fields: ()=> ({
   			id: globalIdField('Competition'),
@@ -107,9 +100,9 @@ var athleteType = new GraphQLObjectType({
   			country : {type: GraphQLString},
   		}),
       interfaces: [nodeInterface]
-  	});
+});
 
-  var {connectionType: competitionConnection} =
+var {connectionType: competitionConnection} =
     connectionDefinitions({name: 'Competition', nodeType: competitionType});
 // let competitionsConnection = connectionDefinitions({
 //   name: 'Competition',
@@ -121,8 +114,12 @@ var storeType = new GraphQLObjectType({
   		fields: {
   			athlete: {
   				type: athleteType,
-  				resolve: () => {
-            return getStore();
+          args: {
+            ...connectionArgs,
+            athleteId : { type: GraphQLString }
+          },
+  				resolve: (_,args) => {
+            return getAthlete(args.athleteId);
           }
   			},
 
@@ -135,12 +132,18 @@ var storeType = new GraphQLObjectType({
 
         competitions: {
           type: new GraphQLList(competitionType),
-          resolve: () => {
-            return getCompetitions();
+          args: {
+            athleteId : {
+              type: GraphQLString,
+              defaltValue: 'all'
+            },
+          },
+          resolve: (_,args) => {
+              return getCompetitions(args.athleteId);
           }
         },
   		}
-  	});
+});
 
 var queryType = new GraphQLObjectType ({
       name: 'RootQuery',
@@ -150,7 +153,7 @@ var queryType = new GraphQLObjectType ({
           resolve: () => store
         }
       })
-    });
+});
 
 var mutationType = new GraphQLObjectType ({
   name: 'Mutation',
@@ -159,12 +162,7 @@ var mutationType = new GraphQLObjectType ({
   })
 });
 
-  var schema = new GraphQLSchema({
+export var Schema = new GraphQLSchema({
   query: queryType,
   //mutation: mutationType
 });
-
-  return schema;
-};
-
-export default Schema;

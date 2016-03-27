@@ -57,6 +57,7 @@ module.exports = {
   },
 
   getAthlete: (id) => {
+     console.log('Get athlete with id : '+ id);
     return Athlete.find({"id": id});
     //return fakeAthlete;
   },
@@ -78,10 +79,14 @@ module.exports = {
       });
   },
 
+  getAllCompetitions: () => {
+    return Competition.find();
+  },
+
   getCompetitions: (athleteId )=> {
 
     console.log('Getting competitions for athletId: '+ athleteId);
-    if (athleteId===null || athleteId==='all') {
+    if (athleteId===null || athleteId==='all' || athleteId===undefined) {
       return Competition.find();
     }
 
