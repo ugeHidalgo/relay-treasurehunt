@@ -4,14 +4,14 @@ import Relay from 'react-relay';
 class Competition extends React.Component {
 
   renderCompetitionRow() {
-    let Competitions = this.props.store.competitions;
+    let Competitions = this.props.store.competitionConnection.edges;
     return Competitions.map(comp => {
       return (
         <tr key={comp.__dataID__}>
-          <td>{comp.name}</td>
-          <td>{comp.type}</td>
-          <td>{comp.city}</td>
-          <td>{comp.country}</td>
+          <td>{comp.node.name}</td>
+          <td>{comp.node.type}</td>
+          <td>{comp.node.city}</td>
+          <td>{comp.node.country}</td>
         </tr>
       )
     });
@@ -36,7 +36,7 @@ class Competition extends React.Component {
 				</table>
 				<div className="panel-footer">
 					<div className="footerText">
-						<p>Total competitions  : {this.props.store.competitions.length}</p>
+						<p>Total competitions  : {this.props.store.competitionConnection.edges.length}</p>
 					</div>
 				</div>
 			</div>
@@ -48,11 +48,13 @@ export default Relay.createContainer(Competition, {
   fragments: {
     store: () => Relay.QL`
       fragment on Store {
-        competitions{
-          name,
-          type,
-          city,
-          country
+        competitionConnection (first:5){
+          edges {
+            node {
+              name,
+              type
+            }
+          }
         }
       }
     `,

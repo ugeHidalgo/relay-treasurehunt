@@ -11,6 +11,6 @@ var competitionSchema = new Mongoose.Schema ({
   athleteId: { type: String, required: true }
 });
 
-var Competition = Mongoose.model('Competition',competitionSchema);
+var Competition = Mongoose.model('competition',competitionSchema);
 
 export default Competition;

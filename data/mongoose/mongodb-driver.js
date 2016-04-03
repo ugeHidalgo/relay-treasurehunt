@@ -6,7 +6,7 @@ Mongoose.connect(uri);
 var db= Mongoose.connection;
 db.on('error',console.error.bind(console,'Connection error to MongoDb'));
 db.once('open', function () {
-    console.log ('Connection to MongoDb successful.')
+    console.log ('Connection to MongoDb via Moongoose successfully done!!!.')
 });
 
 export default Mongoose;

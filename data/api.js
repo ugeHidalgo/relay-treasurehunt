@@ -1,5 +1,6 @@
 import Athlete from './models/athlete';
 import Competition from './models/competition';
+import Athletecomp from './models/athletecomp';
 import Lodash from 'lodash';
 
 // Model types
@@ -49,7 +50,6 @@ import Lodash from 'lodash';
 // comp3.athleteId = '2';
 // fakeCompetitions.push(comp3);
 
-
 module.exports = {
 
   getStore: () => {
@@ -66,11 +66,7 @@ module.exports = {
     }
 
     console.log('Get athlete with firstName : '+ firstName);
-    var a = Athlete.find({firstName:firstName});
-    console.log('Result = '+a);
-    return a;
-
-    //return fakeAthlete;
+    return Athlete.find({firstName:firstName});
   },
 
   getCompetition: (id) => {
@@ -86,38 +82,69 @@ module.exports = {
   },
 
   getAllCompetitions: () => {
-    return Competition.find();
+    return Competition.find({});
   },
 
-  getAthleteCompetitions: (athleteId )=> {
+  // getAthleteCompetitions: ( athleteId )=> {
+  //   console.log('----getAthleteCompetitions('+athleteId+')------');
+  //   if (athleteId===null || athleteId==='all' || athleteId===undefined) {
+  //     console.log('Returning all competitions.');
+  //     return Competition.find({});
+  //   }
+  //
+  //   var comps=[];
+  //   Athletecomp.find({ athleteId: athleteId},function(err,athleteComps){
+  //
+  //     athleteComps.forEach(function(athleteComp){
+  //       comps.push(athleteComp.compId);
+  //     });
+  //
+  //     console.log('Competitions for athlete('+ athleteId + '): [' + comps + ']');
+  //     console.log('-------------------------------------------');
+  //     Competition.find({id:{ $in: comps }},function(err,result){
+  //       if (err) return handleError(err);
+  //       console.log(result);
+  //       return result;
+  //     });
+  //
+  //   });
+  // },
 
-    // console.log('Getting competitions for athletId: '+ athleteId);
-    // if (athleteId===null || athleteId==='all' || athleteId===undefined) {
-    //   return Competition.find();
-    // }
-    //
-    // return Competition.find({"athleteId":athleteId});
+  getAthleteCompetitions: ( athleteId )=> {
+    console.log('----getAthleteCompetitions('+athleteId+')------');
+    if (athleteId===null || athleteId==='all' || athleteId===undefined) {
+      console.log('Returning all competitions.');
+      var compsPromise = Competition.find({}).exec();
+      //var results = compsPromise.then(function (result) {
+      return compsPromise.then(function (result) {
+        console.log(result);
+        return result;
+      });
+      //return results;
+    }
 
-    // var competitionsPromise = Competition.find({}).exec();
-    //
-    // competitionsPromise.then(function(result){
-    //     console.log (result);
-    //     return result;
-    // });
+    var comps=[];
+    var athletecompsPromise = Athletecomp.find({ athleteId: athleteId}).exec();
+    var a =athletecompsPromise.then(function(athleteComps){
 
-    // db.collection('competitions').find().forEach(function(comp){
-    //   comps.push(comp);
-    // });
-    //return comps;
+      athleteComps.forEach(function(atheteComp){
+        comps.push(atheteComp.compId);
+      });
 
-    // let comps = [];
-    // let athleteId = 1;
-    // fakeCompetitions.forEach(function(comp){
-    //   if (comp.athleteId == athleteId){
-    //     comps.push(comp);
-    //   }
-    // });
-    // return comps;
+      return comps;
+
+     }).then(function(comps){
+
+        console.log('Competitions for athlete('+ athleteId + '): [' + comps + ']');
+        console.log('-------------------------------------------');
+        var compsPromise = Competition.find({id:{ $in: comps }}).exec();
+        var results = compsPromise.then (function(competitions){
+          console.log(competitions);
+          return competitions;
+        });
+        return results;
+     });
+     return a; //Todo: need to refactor the way of returning promises 
   },
 
   Athlete,
