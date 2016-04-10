@@ -1,0 +1,2 @@
+
+export MONGO_URL=mongodb://traininguser:traininguser@ds019698.mlab.com:19698/training

@@ -8,6 +8,7 @@ class AthleteForm extends React.Component {
     return athleteCompetitions.map(comp => {
       return (
         <tr key={comp.node.__dataID__}>
+          <td>{comp.node.date}</td>
           <td>{comp.node.name}</td>
           <td>{comp.node.type}</td>
           <td>{comp.node.city}</td>
@@ -36,6 +37,7 @@ class AthleteForm extends React.Component {
 				    <table className='table'>
 					    <thead>
 						    <tr>
+                  <th>Date</th>
 							    <th>Name</th>
 							    <th>Type</th>
                   <th>City</th>
@@ -75,7 +77,11 @@ export default Relay.createContainer(AthleteForm, {
           competitions(first: 5, athleteId: "1") {
             edges {
               node {
-                name
+                name,
+                type,
+                date,
+                city,
+                country
               }
             }
           }

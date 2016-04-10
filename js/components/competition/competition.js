@@ -17,6 +17,11 @@ class Competition extends React.Component {
     });
   }
 
+  setLimit = (e) => {
+    let newLimit = Number(e.target.value);
+    this.props.relay.setVariables({limit : newLimit});
+  }
+
   render() {
 		return (
 			<div className="panel panel-primary">
@@ -37,6 +42,12 @@ class Competition extends React.Component {
 				<div className="panel-footer">
 					<div className="footerText">
 						<p>Total competitions  : {this.props.store.competitionConnection.edges.length}</p>
+            Showing : 
+            <select onChange={this.setLimit} defaultValue="10">
+              <option value="5">5</option>
+              <option value="10">10</option>
+              <option value="25">25</option>
+            </select>
 					</div>
 				</div>
 			</div>
@@ -45,14 +56,20 @@ class Competition extends React.Component {
 }
 
 export default Relay.createContainer(Competition, {
+  initialVariables: {
+    limit: 10
+  },
   fragments: {
     store: () => Relay.QL`
       fragment on Store {
-        competitionConnection (first:5){
+        competitionConnection (first:$limit){
           edges {
             node {
               name,
-              type
+              type,
+              date,
+              city,
+              country
             }
           }
         }

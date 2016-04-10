@@ -30,6 +30,7 @@ import {
   getCompetition,
   getAllCompetitions,
   getCompetitions,
+  insertCompetition
 } from './api';
 
 
@@ -152,14 +153,36 @@ var queryType = new GraphQLObjectType ({
       })
 });
 
+let createCompetitionMutation = mutationWithClientMutationId({
+  name: 'CreateCompetition',
+  inputFields:{
+    _id: {type: GraphQLString},
+    name: {type: GraphQLString},
+    type: {type: GraphQLString},
+    date: {type: GraphQLString},
+    city: {type: GraphQLString},
+    country : {type: GraphQLString}
+  },
+  outputFields:{
+    competition : {
+      type: competitionType,
+      resolve: (obj) => obj.ops[0]
+    }
+  },
+  mutateAndGetPayload: ({_id,name,type,date,city,country}) => {
+      return insertCompetition(_id,name,type,date,city,country);
+  }
+});
+
 var mutationType = new GraphQLObjectType ({
   name: 'Mutation',
   fields: () => ({
     //Define mutations here.
+    createCompetition: createCompetitionMutation
   })
 });
 
 export var Schema = new GraphQLSchema({
   query: queryType,
-  //mutation: mutationType
+  mutation: mutationType
 });

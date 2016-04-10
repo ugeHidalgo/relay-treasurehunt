@@ -1,14 +1,13 @@
 import Mongoose from '../mongoose/mongodb-driver.js';
 
 var competitionSchema = new Mongoose.Schema ({
-  id: { type: String, required: true },
-  _id: { type: String, required: true },
+  id: { type: String },
+  _id: { type: String },
   name: { type: String, required: true },
   type: { type: String, required: true },
-  date: { type: Date, required: true },
-  city: { type: String, required: true },
-  country: { type: String, required: true },
-  athleteId: { type: String, required: true }
+  date: { type: String },
+  city: { type: String },
+  country: { type: String }
 });
 
 var Competition = Mongoose.model('competition',competitionSchema);
