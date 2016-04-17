@@ -944,12 +944,24 @@
           "description": null,
           "fields": [
             {
-              "name": "competition",
+              "name": "competitionEdge",
               "description": null,
               "args": [],
               "type": {
                 "kind": "OBJECT",
-                "name": "Competition",
+                "name": "CompetitionEdge",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "store",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "OBJECT",
+                "name": "Store",
                 "ofType": null
               },
               "isDeprecated": false,

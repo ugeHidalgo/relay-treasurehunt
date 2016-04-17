@@ -164,9 +164,13 @@ let createCompetitionMutation = mutationWithClientMutationId({
     country : {type: GraphQLString}
   },
   outputFields:{
-    competition : {
-      type: competitionType,
-      resolve: (obj) => obj.ops[0]
+    competitionEdge : {
+      type: competitionConnection.edgeType,
+      resolve: (obj) => ({node :obj, cursor: obj.insertedId})
+    },
+    store: {
+      type: storeType,
+      resolve: () => store
     }
   },
   mutateAndGetPayload: ({_id,name,type,date,city,country}) => {

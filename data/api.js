@@ -45,7 +45,7 @@ module.exports = {
       city: city,
       country: country
     });
-    newComp.save(function(err){
+    return newComp.save(function(err){
       if (err) {
         console.log('Error saving competition.');
         return console.log(err);
